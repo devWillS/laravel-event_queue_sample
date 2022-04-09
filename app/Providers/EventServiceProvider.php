@@ -2,10 +2,14 @@
 
 namespace App\Providers;
 
+use App\Events\PublishProcessor;
+use App\Listeners\MessageQueueSubscriber;
+use App\Listeners\MessageSubscriber;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Events\Dispatcher;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -18,6 +22,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        PublishProcessor::class => [
+            MessageSubscriber::class,
+        ],
     ];
 
     /**
@@ -27,7 +34,17 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        parent::boot();
+        Event::listen(
+            PublishProcessor::class, 
+            MessageSubscriber::class,
+            MessageQueueSubscriber::class,
+        );
+
+        $this->app['events']->listen(
+            PublishProcessor::class,
+            MessageSubscriber::class
+        );
     }
 
     /**
