@@ -22,3 +22,8 @@ Route::get('/', function () {
     \Event::dispatch(new \App\Events\PublishProcessor(1));
     return $view;
 });
+
+Route::get(
+    '/pdf',
+    \App\Http\Controllers\PdfGeneratorAction::class
+);
