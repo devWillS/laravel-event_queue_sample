@@ -1,6 +1,10 @@
 # For more information: https://laravel.com/docs/sail
 version: '3'
 services:
+    elasticsearch:
+        image: elasticsearch:8.1.2
+        ports:
+            - "9200:9200"
     laravel.test:
         build:
             context: ./vendor/laravel/sail/runtimes/8.1

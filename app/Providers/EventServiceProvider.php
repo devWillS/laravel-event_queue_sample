@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Events\PublishProcessor;
+use App\Events\ReviewRregistered;
 use App\Listeners\MessageQueueSubscriber;
 use App\Listeners\MessageSubscriber;
+use App\Listeners\ReviewIndexCreator;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -19,12 +21,15 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
-        ],
-        PublishProcessor::class => [
-            MessageSubscriber::class,
-        ],
+        // Registered::class => [
+        //     SendEmailVerificationNotification::class,
+        // ],
+        // PublishProcessor::class => [
+        //     MessageSubscriber::class,
+        // ],
+        ReviewRregistered::class => [
+            ReviewIndexCreator::class,
+        ]
     ];
 
     /**
